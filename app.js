@@ -104,37 +104,37 @@ function renderGlossary() {
 
 
 /* ========================================= */
-/* 1. РОУТЕР (Чистые URL через History API)  */
+/* ОБНОВЛЕННЫЕ ФУНКЦИИ СТАТЬИ И СИМУЛЯТОРА   */
 /* ========================================= */
 
-// Функция открытия статьи с изменением URL
+// Функция открытия статьи
 function openArticle(id, addToHistory = true) {
     const crisis = crisesData.find(c => c.id === id);
     if (!crisis) return;
 
     if (addToHistory) {
-        // Меняем URL без перезагрузки страницы (например: /dotcom-bubble)
         history.pushState({ id: id }, crisis.title, `/${id}`);
     }
 
     const articleContainer = document.getElementById('article-content');
     
-    // Подготовка текста. Разделим его, чтобы вставить график в середину (Скроллтеллинг)
-    let storyHTML = '';
-    crisis.story.forEach((p, index) => {
-        storyHTML += `<p class="story-block">${p}</p>`;
-        // Вставляем график после второго абзаца
-        if (index === 1) {
-            storyHTML += `
-                <div class="scroll-chart-container glass-panel">
-                    <svg viewBox="0 0 500 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
-                        <!-- SVG линия краха -->
-                        <path class="crash-path" d="M0,50 Q100,40 150,60 T300,80 Q350,80 400,180 T500,190"></path>
-                    </svg>
-                </div>
-            `;
-        }
-    });
+    // Формируем текст абзацев (ГРАФИКИ УДАЛЕНЫ)
+    const storyHTML = crisis.story.map(p => `<p class="story-block">${p}</p>`).join('');
+
+    // Формируем новые блоки Причин и Последствий
+    const causesHTML = `
+        <div class="causes-box glass-panel">
+            <h4 style="color: var(--accent); margin-top:0; font-size: 1.2rem;">⚡ Причины кризиса:</h4>
+            <ul>${crisis.causes.map(c => `<li>${c}</li>`).join('')}</ul>
+        </div>
+    `;
+
+    const consequencesHTML = `
+        <div class="consequences-box glass-panel">
+            <h4 style="color: #4caf50; margin-top:0; font-size: 1.2rem;">🌊 Последствия:</h4>
+            <ul>${crisis.consequences.map(c => `<li>${c}</li>`).join('')}</ul>
+        </div>
+    `;
 
     const interactHTML = `
         <div class="interactive-box glass-panel">
@@ -147,12 +147,17 @@ function openArticle(id, addToHistory = true) {
         </div>
     `;
 
+    // Собираем страницу в правильном порядке
     articleContainer.innerHTML = `
         <img src="${crisis.imageUrl}" class="article-cover" alt="${crisis.title}">
         <h1 class="article-title">${crisis.title} (${crisis.year})</h1>
         <h3 style="color: #ccc; margin-top: 0;">${crisis.subtitle}</h3>
         <div class="loss-stat">⚠️ Ущерб: ${crisis.losses}</div>
+        
+        ${causesHTML}
         ${storyHTML}
+        ${consequencesHTML}
+        
         ${interactHTML}
     `;
 
@@ -163,10 +168,19 @@ function openArticle(id, addToHistory = true) {
     articleSection.classList.add('fade-in');
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Инициализируем анимацию графиков
-    initScrollCharts();
 }
+
+// ГЛОБАЛЬНАЯ функция симулятора (привязана к объекту window, чтобы кнопки в HTML ее "видели")
+window.showResult = function(crisisId, optionIndex) {
+    const crisis = crisesData.find(c => c.id === crisisId);
+    if (!crisis) return;
+    
+    const resultBox = document.getElementById(`result-${crisisId}`);
+    if (resultBox) {
+        resultBox.innerHTML = crisis.interactiveQuestion.options[optionIndex].result;
+        resultBox.classList.remove('hidden');
+    }
+};
 
 // Функция возврата на главную
 function closeArticle(addToHistory = true) {

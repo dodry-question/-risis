@@ -233,3 +233,21 @@ footer { text-align: center; padding: 30px 20px; background: #000; font-size: 0.
     /* Анимация управляется через JS, но зададим transition */
     transition: stroke-dashoffset 2s ease-in-out;
 }
+
+/* Блоки причин и последствий */
+.causes-box, .consequences-box {
+    padding: 25px;
+    margin: 30px 0;
+    border-radius: 12px;
+}
+.causes-box ul, .consequences-box ul {
+    margin: 0;
+    padding-left: 25px;
+}
+.causes-box li, .consequences-box li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+.causes-box li::marker { color: var(--accent); }
+.consequences-box li::marker { color: #4caf50; } /* Зеленый маркер для последствий */
