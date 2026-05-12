@@ -1,4 +1,109 @@
 /* ========================================= */
+/* 0. РЕНДЕР И НАВИГАЦИЯ (Базовые функции)   */
+/* ========================================= */
+
+// Функция плавного скролла и навигации
+function scrollToSection(id) {
+    const articleSection = document.getElementById('crisis-article');
+    const targetElement = document.getElementById(id);
+    
+    // 1. Если мы находимся внутри статьи (главные секции скрыты)
+    if (!articleSection.classList.contains('hidden')) {
+        // Вызываем функцию закрытия статьи (false - чтобы не плодить лишнюю историю в URL)
+        closeArticle(false);
+        // Так как мы перешли на главную, обновляем URL на корневой
+        history.pushState(null, 'Главная', '/');
+    }
+
+    // 2. Делаем плавный скролл (через setTimeout, чтобы DOM успел показать скрытые секции)
+    setTimeout(() => {
+        if (targetElement) {
+            // Используем расчет отступа, чтобы липкая шапка (Sticky Header) не перекрывала заголовки
+            const headerOffset = document.querySelector('.sticky-header').offsetHeight || 80;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    }, 50);
+
+    // 3. Закрываем мобильное меню (Бургер), если оно открыто
+    const navLinks = document.getElementById('nav-links');
+    const burgerBtn = document.getElementById('burger-btn');
+    if (navLinks && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        if (burgerBtn) burgerBtn.classList.remove('active');
+    }
+}
+
+// Рендер теоретического блока
+function renderTheory() {
+    const container = document.getElementById('theory-container');
+    if (!container || typeof theoryData === 'undefined') return;
+    
+    let causesHTML = theoryData.causes.map(cause => `<span class="cause-tag">${cause}</span>`).join('');
+    let typesHTML = theoryData.types.map(type => `
+        <li style="margin-bottom: 10px;">
+            <strong style="color: var(--accent);">${type.name}:</strong> ${type.desc}
+        </li>
+    `).join('');
+    
+    // Добавил класс glass-panel, чтобы карточка тоже была с эффектом глассморфизма
+    container.innerHTML = `
+        <div class="theory-card glass-panel">
+            <h3>${theoryData.title}</h3>
+            <p>${theoryData.definition}</p>
+            <div style="margin: 25px 0;">
+                <h4 style="margin-bottom: 10px;">Классификация кризисов:</h4>
+                <ul style="padding-left: 20px;">${typesHTML}</ul>
+            </div>
+            <h4>Главные триггеры:</h4>
+            <div class="causes-list">${causesHTML}</div>
+            <div style="margin-top: 25px; padding: 15px; background: rgba(42, 8, 8, 0.4); border-left: 3px solid var(--accent); border-radius: 8px;">
+                <i style="font-size: 0.95rem;">${theoryData.socialImpact}</i>
+            </div>
+        </div>
+    `;
+}
+
+// Рендер Таймлайна
+function renderTimeline() {
+    const container = document.getElementById('timeline-container');
+    if (!container || typeof crisesData === 'undefined') return;
+
+    // Сначала очищаем контейнер, оставляя только центральную линию
+    container.innerHTML = '<div class="timeline-line"></div>';
+    
+    crisesData.forEach(crisis => {
+        const dot = document.createElement('div');
+        dot.className = 'timeline-dot';
+        dot.setAttribute('data-year', crisis.year);
+        dot.setAttribute('title', crisis.title);
+        // При клике открываем статью, передавая id кризиса
+        dot.onclick = () => openArticle(crisis.id);
+        container.appendChild(dot);
+    });
+}
+
+// Рендер Словаря терминов
+function renderGlossary() {
+    const container = document.getElementById('glossary-container');
+    if (!container || typeof glossaryData === 'undefined') return;
+
+    // Выводим карточки словаря с эффектом glass-panel
+    container.innerHTML = glossaryData.map(item => `
+        <div class="glossary-card glass-panel">
+            <h4>${item.term}</h4>
+            <p style="font-size: 0.95rem;">${item.definition}</p>
+        </div>
+    `).join('');
+}
+
+
+/* ========================================= */
 /* 1. РОУТЕР (Чистые URL через History API)  */
 /* ========================================= */
 
