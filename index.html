@@ -7,13 +7,12 @@
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="stylesheet" href="style.css">
 </head>
-
-
+<body>
     <!-- Фоновые пятна для Глассморфизма -->
-        <div class="bg-blobs">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-        </div>
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
 
     <!-- Навигация (Sticky Header) -->
     <nav class="sticky-header">
@@ -31,7 +30,7 @@
             <a href="#" onclick="scrollToSection('timeline'); return false;">Таймлайн</a>
             <a href="#" onclick="scrollToSection('glossary'); return false;">Словарь</a>
             <a href="#" onclick="scrollToSection('survival-guide'); return false;">Советы</a>
-            <a href="#" id="btn-time-machine" style="color: var(--accent);">Машина времени </a>
+            <a href="#" id="btn-time-machine" style="color: var(--accent);">Машина времени 🧮</a>
         </div>
     </nav>
 
@@ -91,11 +90,12 @@
 
     <script src="data.js"></script>
     <script src="app.js"></script>
+    
     <!-- Модальное окно: Машина времени -->
     <div id="time-machine-modal" class="modal-overlay hidden">
         <div class="modal-content glass-panel">
             <button class="modal-close" id="close-time-machine">✖</button>
-            <h2>Машина времени </h2>
+            <h2>Машина времени 🧮</h2>
             <p>Узнайте, что стало бы с вашими деньгами в разные эпохи.</p>
             
             <div class="calculator-form">
