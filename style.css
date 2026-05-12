@@ -17,11 +17,19 @@ body, html {
 
 /* Навигация */
 .sticky-header {
-    position: sticky; top: 0; width: 100%;
+    position: fixed; /* Заменили sticky на fixed */
+    top: 0;
+    left: 0; /* Обязательно добавляем left: 0 для центровки fixed-элемента */
+    width: 100%;
     background: rgba(15, 17, 21, 0.85);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    z-index: 1000; display: flex; justify-content: space-between;
-    align-items: center; padding: 15px 5%; box-sizing: border-box;
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 1000; /* Держим шапку поверх всего сайта */
+    display: flex; 
+    justify-content: space-between;
+    align-items: center; 
+    padding: 15px 5%; 
+    box-sizing: border-box;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
