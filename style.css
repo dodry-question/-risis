@@ -51,11 +51,18 @@ body, html {
 }
 
 /* Hero Section */
-.hero { height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 0 20px;}
-.hero-content { position: relative; z-index: 2; }
-/* Динамические шрифты: на мобилке меньше, на ПК больше */
-.hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin-bottom: 10px; color: var(--red-alert); line-height: 1.1; }
-.hero p { font-size: clamp(1rem, 4vw, 1.5rem); margin-bottom: 30px; }
+.hero { 
+    min-height: 100vh; /* Теперь блок занимает 100% высоты экрана */
+    width: 100%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    position: relative; 
+    overflow: hidden; 
+    padding: 0 20px;
+    box-sizing: border-box;
+}
 
 .falling-chart {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
