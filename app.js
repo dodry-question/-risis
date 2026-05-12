@@ -6,15 +6,30 @@ function scrollToSection(id) {
 // 1. Отрисовка теоретического блока
 function renderTheory() {
     const container = document.getElementById('theory-container');
+    
+    // Генерируем тэги причин
     let causesHTML = theoryData.causes.map(cause => `<span class="cause-tag">${cause}</span>`).join('');
+    
+    // Генерируем блоки видов кризисов
+    let typesHTML = theoryData.types.map(type => `
+        <li style="margin-bottom: 10px;">
+            <strong style="color: var(--accent);">${type.name}:</strong> ${type.desc}
+        </li>
+    `).join('');
     
     container.innerHTML = `
         <div class="theory-card">
             <h3>${theoryData.title}</h3>
             <p>${theoryData.definition}</p>
-            <p><em>"${theoryData.quote}"</em></p>
+            <div style="margin: 25px 0;">
+                <h4 style="margin-bottom: 10px;">Классификация кризисов:</h4>
+                <ul style="padding-left: 20px;">${typesHTML}</ul>
+            </div>
             <h4>Главные триггеры:</h4>
             <div class="causes-list">${causesHTML}</div>
+            <div style="margin-top: 25px; padding: 15px; background: #2a0808; border-left: 3px solid #ff5252;">
+                <i>${theoryData.socialImpact}</i>
+            </div>
         </div>
     `;
 }
