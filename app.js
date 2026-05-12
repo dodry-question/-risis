@@ -1,7 +1,16 @@
-// Функция плавного скролла с учетом высоты Sticky Header
+// Логика Гамбургер-меню
+const burgerBtn = document.getElementById('burger-btn');
+const navLinks = document.getElementById('nav-links');
+
+burgerBtn.addEventListener('click', () => {
+    burgerBtn.classList.toggle('active');
+    navLinks.classList.toggle('active');
+});
+
+// Плавный скролл с закрытием мобильного меню
 function scrollToSection(id) {
     const element = document.getElementById(id);
-    const headerOffset = 80; // Высота фиксированного меню
+    const headerOffset = document.querySelector('.sticky-header').offsetHeight;
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
@@ -9,9 +18,15 @@ function scrollToSection(id) {
         top: offsetPosition,
         behavior: "smooth"
     });
+
+    // Если открыто мобильное меню - закрываем его
+    if (navLinks.classList.contains('active')) {
+        burgerBtn.classList.remove('active');
+        navLinks.classList.remove('active');
+    }
 }
 
-// 1. Отрисовка теоретического блока
+// Отрисовка теоретического блока
 function renderTheory() {
     const container = document.getElementById('theory-container');
     
@@ -32,48 +47,45 @@ function renderTheory() {
             </div>
             <h4>Главные триггеры:</h4>
             <div class="causes-list">${causesHTML}</div>
-            <div style="margin-top: 25px; padding: 15px; background: #2a0808; border-left: 3px solid var(--accent);">
-                <i>${theoryData.socialImpact}</i>
+            <div style="margin-top: 25px; padding: 15px; background: #2a0808; border-left: 3px solid var(--accent); border-radius: 4px;">
+                <i style="font-size: 0.95rem;">${theoryData.socialImpact}</i>
             </div>
         </div>
     `;
 }
 
-// 2. Отрисовка Таймлайна
+// Отрисовка Таймлайна (теперь с поддержкой вертикального вида на мобилках)
 function renderTimeline() {
     const container = document.getElementById('timeline-container');
     crisesData.forEach(crisis => {
         const dot = document.createElement('div');
         dot.className = 'timeline-dot';
         dot.setAttribute('data-year', crisis.year);
-        dot.title = crisis.title;
+        dot.setAttribute('title', crisis.title); // Выводится через CSS на телефонах
         dot.onclick = () => openArticle(crisis.id);
         container.appendChild(dot);
     });
 }
 
-// 3. НОВАЯ ФУНКЦИЯ: Отрисовка словаря терминов
+// Отрисовка словаря терминов
 function renderGlossary() {
     const container = document.getElementById('glossary-container');
     container.innerHTML = glossaryData.map(item => `
         <div class="glossary-card">
             <h4>${item.term}</h4>
-            <p>${item.definition}</p>
+            <p style="font-size: 0.95rem;">${item.definition}</p>
         </div>
     `).join('');
 }
 
-// 4. Открытие конкретного кризиса (с картинкой и классом анимации)
+// Открытие конкретного кризиса
 function openArticle(id) {
     const crisis = crisesData.find(c => c.id === id);
     if (!crisis) return;
 
     const articleContainer = document.getElementById('article-content');
-    
-    // Формируем текст абзацев
     const storyHTML = crisis.story.map(p => `<p class="story-block">${p}</p>`).join('');
 
-    // Встраиваем интерактивный блок
     const interactHTML = `
         <div class="interactive-box">
             <h3>Симулятор: ${crisis.interactiveQuestion.question}</h3>
@@ -85,29 +97,27 @@ function openArticle(id) {
         </div>
     `;
 
-    // ДОБАВЛЕНО: Вывод картинки imageUrl перед текстом
+    // Обратите внимание: убрал жесткий font-size, добавил класс .article-title для адаптива
     articleContainer.innerHTML = `
         <img src="${crisis.imageUrl}" class="article-cover" alt="${crisis.title}">
-        <h1 style="font-size: 3rem; margin-bottom: 5px;">${crisis.title} (${crisis.year})</h1>
-        <h3 style="color: #888; margin-top: 0;">${crisis.subtitle}</h3>
+        <h1 class="article-title">${crisis.title} (${crisis.year})</h1>
+        <h3 style="color: #888; margin-top: 0; font-size: clamp(1rem, 3vw, 1.2rem);">${crisis.subtitle}</h3>
         <div class="loss-stat">⚠️ Ущерб: ${crisis.losses}</div>
         ${storyHTML}
         ${interactHTML}
     `;
 
-    // Скрываем все главные секции (через общий класс .main-section)
     document.querySelectorAll('.main-section').forEach(sec => sec.classList.add('hidden'));
     
-    // Показываем статью и добавляем анимацию fade-in
     const articleSection = document.getElementById('crisis-article');
     articleSection.classList.remove('hidden');
     articleSection.classList.add('fade-in');
     
-    // Прокручиваем наверх статьи (учитывая высоту шапки)
-    window.scrollTo({ top: articleSection.offsetTop - 80, behavior: 'smooth' });
+    const headerOffset = document.querySelector('.sticky-header').offsetHeight;
+    window.scrollTo({ top: articleSection.offsetTop - headerOffset, behavior: 'smooth' });
 }
 
-// 5. Логика для симулятора
+// Логика для симулятора
 function showResult(crisisId, optionIndex) {
     const crisis = crisesData.find(c => c.id === crisisId);
     const resultBox = document.getElementById(`result-${crisisId}`);
@@ -116,22 +126,18 @@ function showResult(crisisId, optionIndex) {
     resultBox.classList.remove('hidden');
 }
 
-// 6. Закрыть статью и вернуться на главный экран
+// Закрыть статью и вернуться
 function closeArticle() {
     const articleSection = document.getElementById('crisis-article');
     articleSection.classList.add('hidden');
     articleSection.classList.remove('fade-in');
 
-    // Возвращаем видимость всем главным секциям
     document.querySelectorAll('.main-section').forEach(sec => sec.classList.remove('hidden'));
-    
-    // Плавно скроллим обратно к таймлайну
     scrollToSection('timeline');
 }
 
-// Инициализация при загрузке страницы
 window.onload = () => {
     renderTheory();
     renderTimeline();
-    renderGlossary(); // Рендерим новый словарь
+    renderGlossary();
 };

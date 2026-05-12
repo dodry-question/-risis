@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Анатомия кризисов</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,7 +11,15 @@
     <!-- Навигация (Sticky Header) -->
     <nav class="sticky-header">
         <div class="logo">Анатомия <span>Кризисов</span></div>
-        <div class="nav-links">
+        
+        <!-- Кнопка мобильного меню -->
+        <button class="burger-btn" id="burger-btn" aria-label="Открыть меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-links" id="nav-links">
             <a href="#" onclick="scrollToSection('theory'); return false;">Теория</a>
             <a href="#" onclick="scrollToSection('timeline'); return false;">Таймлайн</a>
             <a href="#" onclick="scrollToSection('glossary'); return false;">Словарь</a>
@@ -21,7 +29,7 @@
 
     <!-- Главный экран -->
     <header class="hero main-section">
-        <div class="falling-chart"></div> <!-- Анимация графиков -->
+        <div class="falling-chart"></div> 
         <div class="hero-content">
             <h1>Иллюзия Роста</h1>
             <p>Как и почему рушится мировая экономика</p>
@@ -32,35 +40,30 @@
     <!-- Блок с теорией -->
     <section id="theory" class="theory-section main-section">
         <h2>Анатомия катастрофы</h2>
-        <div class="theory-grid" id="theory-container">
-            <!-- Сюда JS вставит данные из теории -->
-        </div>
+        <div class="theory-grid" id="theory-container"></div>
     </section>
 
     <!-- Интерактивный Таймлайн -->
     <section id="timeline" class="timeline-section main-section">
-        <h2>Ось времени: Великие падения</h2>
+        <h2>Ось времени</h2>
         <div class="timeline" id="timeline-container">
             <div class="timeline-line"></div>
-            <!-- Сюда JS вставит точки (теперь их 7) -->
         </div>
     </section>
 
-    <!-- НОВЫЙ БЛОК: Словарь терминов -->
+    <!-- Словарь терминов -->
     <section id="glossary" class="glossary-section main-section">
         <h2>Словарь Инвестора</h2>
-        <div class="glossary-grid" id="glossary-container">
-            <!-- Сюда JS вставит карточки терминов -->
-        </div>
+        <div class="glossary-grid" id="glossary-container"></div>
     </section>
 
-    <!-- НОВЫЙ БЛОК: Как пережить кризис -->
+    <!-- Как пережить кризис -->
     <section id="survival-guide" class="survival-section main-section">
-        <h2>Как пережить шторм: Чек-лист</h2>
+        <h2>Как пережить шторм</h2>
         <div class="checklist-container">
             <ul class="survival-checklist">
                 <li><span>🛡️ Формируйте подушку безопасности:</span> Наличные на 3-6 месяцев жизни уберегут от долгов при потере работы.</li>
-                <li><span>📊 Диверсифицируйте:</span> Не держите все сбережения в одной валюте или в акциях одной компании.</li>
+                <li><span>📊 Диверсифицируйте:</span> Не держите все сбережения в одной валюте или активах одной компании.</li>
                 <li><span>📉 Не паникуйте на дне:</span> Продавать активы во время обвала — значит фиксировать максимальный убыток.</li>
                 <li><span>🧠 Инвестируйте в себя:</span> Ваша профессия и навыки — единственный актив, который не обесценивает инфляция.</li>
                 <li><span>🚫 Избегайте новых кредитов:</span> В период нестабильности ставки растут, а риски потери дохода максимальны.</li>
@@ -68,14 +71,14 @@
         </div>
     </section>
 
-    <!-- Контейнер для статьи (появляется при клике на год) -->
+    <!-- Контейнер для статьи -->
     <section id="crisis-article" class="article-section hidden">
-        <button class="back-btn" onclick="closeArticle()">← Вернуться к эпохам</button>
-        <div id="article-content"></div> <!-- Сюда подтянется картинка и текст -->
+        <button class="back-btn" onclick="closeArticle()">← Назад</button>
+        <div id="article-content"></div>
     </section>
 
     <footer>
-        <p>Материалы подготовлены на основе статей <a href="https://cyberleninka.ru/" target="_blank">CyberLeninka</a>, <a href="https://diletant.media/" target="_blank">Diletant</a> и <a href="https://www.rbc.ru/" target="_blank">РБК</a>.</p>
+        <p>Материалы: <a href="https://cyberleninka.ru/" target="_blank">CyberLeninka</a>, <a href="https://diletant.media/" target="_blank">Diletant</a> и <a href="https://www.rbc.ru/" target="_blank">РБК</a>.</p>
     </footer>
 
     <script src="data.js"></script>
