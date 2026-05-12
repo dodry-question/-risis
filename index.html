@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анатомия кризисов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Главный экран -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Иллюзия Роста</h1>
+            <p>Как и почему рушится мировая экономика</p>
+            <button onclick="scrollToSection('theory')">Начать погружение</button>
+        </div>
+        <div class="falling-chart"></div> <!-- Анимация падающего графика на фоне -->
+    </header>
+
+    <!-- Блок с теорией (КиберЛенинка) -->
+    <section id="theory" class="theory-section">
+        <h2>Анатомия катастрофы</h2>
+        <div class="theory-grid" id="theory-container">
+            <!-- Сюда JS вставит данные из теории -->
+        </div>
+    </section>
+
+    <!-- Интерактивный Таймлайн -->
+    <section id="timeline" class="timeline-section">
+        <h2>Ось времени: Великие падения</h2>
+        <div class="timeline" id="timeline-container">
+            <div class="timeline-line"></div>
+            <!-- Сюда JS вставит точки 1929 и 2008 -->
+        </div>
+    </section>
+
+    <!-- Контейнер для статьи (появляется при клике на год) -->
+    <section id="crisis-article" class="article-section hidden">
+        <button class="back-btn" onclick="closeArticle()">← Вернуться к таймлайну</button>
+        <div id="article-content"></div>
+    </section>
+
+    <footer>
+        <p>Материалы подготовлены на основе статей <a href="https://cyberleninka.ru/" target="_blank">CyberLeninka</a>, <a href="https://diletant.media/" target="_blank">Diletant</a> и <a href="https://www.rbc.ru/" target="_blank">РБК</a>.</p>
+    </footer>
+
+    <!-- Подключаем скрипты -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
