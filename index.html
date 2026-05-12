@@ -6,7 +6,13 @@
     <title>Анатомия кризисов</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+
+    <!-- Фоновые пятна для Глассморфизма -->
+        <div class="bg-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
 
     <!-- Навигация (Sticky Header) -->
     <nav class="sticky-header">
@@ -24,6 +30,7 @@
             <a href="#" onclick="scrollToSection('timeline'); return false;">Таймлайн</a>
             <a href="#" onclick="scrollToSection('glossary'); return false;">Словарь</a>
             <a href="#" onclick="scrollToSection('survival-guide'); return false;">Советы</a>
+            <a href="#" id="btn-time-machine" style="color: var(--accent);">Машина времени </a>
         </div>
     </nav>
 
@@ -83,5 +90,30 @@
 
     <script src="data.js"></script>
     <script src="app.js"></script>
+    <!-- Модальное окно: Машина времени -->
+    <div id="time-machine-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+            <button class="modal-close" id="close-time-machine">✖</button>
+            <h2>Машина времени </h2>
+            <p>Узнайте, что стало бы с вашими деньгами в разные эпохи.</p>
+            
+            <div class="calculator-form">
+                <label>Введите сумму (в долларах или рублях):</label>
+                <input type="number" id="tm-amount" placeholder="Например, 1000" value="1000">
+                
+                <label>Выберите эпоху:</label>
+                <select id="tm-era">
+                    <option value="1929">1929: Великая депрессия</option>
+                    <option value="1998">1998: Дефолт в России (в рублях)</option>
+                    <option value="2000">2000: Крах Доткомов</option>
+                    <option value="2008">2008: Ипотечный кризис</option>
+                </select>
+                
+                <button id="tm-calculate" class="glass-btn">Отправиться в прошлое</button>
+            </div>
+            
+            <div id="tm-result" class="tm-result-box hidden"></div>
+        </div>
+    </div>
 </body>
 </html>

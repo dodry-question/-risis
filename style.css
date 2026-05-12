@@ -152,3 +152,84 @@ footer { text-align: center; padding: 30px 20px; background: #000; font-size: 0.
     .options button { width: 100%; } /* Кнопки симулятора друг под другом */
     .back-btn { width: 100%; text-align: center; } /* Широкая кнопка "Назад" для пальца */
 }
+/* 1. ОБНОВЛЕНИЕ ПЕРЕМЕННЫХ И ФОНА */
+:root {
+    --glass-bg: rgba(25, 28, 35, 0.4); /* Полупрозрачный фон */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Плавающие пятна на заднем фоне */
+.bg-blobs {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; overflow: hidden; pointer-events: none;
+}
+.blob {
+    position: absolute; filter: blur(90px); opacity: 0.5;
+    border-radius: 50%; animation: float 10s infinite ease-in-out alternate;
+}
+.blob-1 {
+    width: 400px; height: 400px; background: #8b0000;
+    top: -100px; left: -100px; animation-delay: 0s;
+}
+.blob-2 {
+    width: 500px; height: 500px; background: #2a2a2a;
+    bottom: -150px; right: -100px; animation-delay: -5s;
+}
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.1); }
+}
+
+/* 2. ПРИМЕНЕНИЕ ГЛАССМОРФИЗМА (Добавь класс .glass-panel нужным элементам или замени старые) */
+.glass-panel, .theory-card, .glossary-card, .checklist-container, .interactive-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+}
+.sticky-header {
+    background: rgba(15, 17, 21, 0.6); /* Чуть прозрачнее для эффекта */
+    backdrop-filter: blur(20px);
+    border-bottom: var(--glass-border);
+}
+
+/* 3. МОДАЛЬНОЕ ОКНО МАШИНЫ ВРЕМЕНИ */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999; opacity: 1; transition: opacity 0.3s ease;
+}
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-content {
+    width: 90%; max-width: 500px; padding: 40px; position: relative;
+    transform: translateY(0); transition: transform 0.3s ease;
+}
+.modal-overlay.hidden .modal-content { transform: translateY(-50px); }
+.modal-close {
+    position: absolute; top: 15px; right: 20px; background: none; border: none;
+    color: #fff; font-size: 1.5rem; cursor: pointer;
+}
+.calculator-form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+.calculator-form input, .calculator-form select {
+    padding: 12px; border-radius: 8px; border: var(--glass-border);
+    background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 1rem;
+}
+.glass-btn { background: rgba(211, 47, 47, 0.7); border: var(--glass-border); backdrop-filter: blur(5px); }
+.tm-result-box { margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(255, 82, 82, 0.1); border: 1px solid var(--accent); }
+
+/* 4. ЖИВЫЕ ГРАФИКИ (Scrollytelling) */
+.scroll-chart-container {
+    width: 100%; height: 200px; margin: 40px 0;
+    background: rgba(0, 0, 0, 0.2); border-radius: 12px;
+    border: var(--glass-border); overflow: hidden; position: relative;
+}
+.crash-path {
+    fill: none; stroke: var(--red-alert); stroke-width: 4;
+    stroke-linecap: round; stroke-linejoin: round;
+    /* Анимация управляется через JS, но зададим transition */
+    transition: stroke-dashoffset 2s ease-in-out;
+}
