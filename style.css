@@ -259,3 +259,22 @@ footer { text-align: center; padding: 30px 20px; background: #000; font-size: 0.
 }
 .causes-box li::marker { color: var(--accent); }
 .consequences-box li::marker { color: #4caf50; } /* Зеленый маркер для последствий */
+
+/* --- Стили для проверки ответов в симуляторе --- */
+.glass-btn {
+    transition: all 0.3s ease; /* Плавная смена цвета */
+}
+
+/* Правильный ответ */
+.glass-btn.correct-answer {
+    border-color: #4caf50;
+    background: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Неправильный ответ */
+.glass-btn.wrong-answer {
+    border-color: var(--red-alert);
+    background: rgba(211, 47, 47, 0.2);
+    box-shadow: 0 0 15px rgba(211, 47, 47, 0.4);
+}

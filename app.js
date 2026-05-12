@@ -100,6 +100,7 @@ function renderGlossary() {
 /* ========================================= */
 
 // Функция открытия статьи
+// Функция открытия статьи
 function openArticle(id, addToHistory = true) {
     const crisis = crisesData.find(c => c.id === id);
     if (!crisis) return;
@@ -125,16 +126,22 @@ function openArticle(id, addToHistory = true) {
         </div>
     `;
 
-    const interactHTML = `
-        <div class="interactive-box glass-panel">
-            <h3>Симулятор: ${crisis.interactiveQuestion.question}</h3>
-            <div class="options">
-                <button class="glass-btn" onclick="window.showResult('${id}', 0)">${crisis.interactiveQuestion.options[0].text}</button>
-                <button class="glass-btn" onclick="window.showResult('${id}', 1)">${crisis.interactiveQuestion.options[1].text}</button>
-            </div>
-            <div id="result-${id}" class="result-box hidden"></div>
-        </div>
-    `;
+    // Генерируем HTML для ВСЕХ вопросов из массива
+    let interactHTML = '';
+    if (crisis.interactiveQuestions) {
+        crisis.interactiveQuestions.forEach((q, qIndex) => {
+            interactHTML += `
+                <div class="interactive-box glass-panel" style="margin-bottom: 20px;">
+                    <h3 style="color: #ffeb3b; font-size: 1.1rem; text-align: left;">Вопрос ${qIndex + 1}: ${q.question}</h3>
+                    <div class="options">
+                        <button id="btn-${id}-${qIndex}-0" class="glass-btn" onclick="window.showResult('${id}', ${qIndex}, 0)">${q.options[0].text}</button>
+                        <button id="btn-${id}-${qIndex}-1" class="glass-btn" onclick="window.showResult('${id}', ${qIndex}, 1)">${q.options[1].text}</button>
+                    </div>
+                    <div id="result-${id}-${qIndex}" class="result-box hidden"></div>
+                </div>
+            `;
+        });
+    }
 
     articleContainer.innerHTML = `
         <img src="${crisis.imageUrl}" class="article-cover" alt="${crisis.title}">
@@ -146,6 +153,7 @@ function openArticle(id, addToHistory = true) {
         ${storyHTML}
         ${consequencesHTML}
         
+        <h2 style="margin-top: 50px;">Проверка знаний</h2>
         ${interactHTML}
     `;
 
@@ -157,14 +165,36 @@ function openArticle(id, addToHistory = true) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Вывод результата симулятора
-window.showResult = function(crisisId, optionIndex) {
+// Вывод результата симулятора с подсветкой
+window.showResult = function(crisisId, qIndex, optionIndex) {
     const crisis = crisesData.find(c => c.id === crisisId);
     if (!crisis) return;
     
-    const resultBox = document.getElementById(`result-${crisisId}`);
+    const question = crisis.interactiveQuestions[qIndex];
+    const selectedOption = question.options[optionIndex];
+    const resultBox = document.getElementById(`result-${crisisId}-${qIndex}`);
+    
+    // Находим обе кнопки этого конкретного вопроса
+    const btn0 = document.getElementById(`btn-${crisisId}-${qIndex}-0`);
+    const btn1 = document.getElementById(`btn-${crisisId}-${qIndex}-1`);
+
+    // Сбрасываем цвета у обеих кнопок (чтобы можно было перевыбрать)
+    btn0.classList.remove('correct-answer', 'wrong-answer');
+    btn1.classList.remove('correct-answer', 'wrong-answer');
+
+    // Применяем нужный класс к нажатой кнопке
+    const clickedBtn = optionIndex === 0 ? btn0 : btn1;
+    if (selectedOption.isCorrect) {
+        clickedBtn.classList.add('correct-answer');
+    } else {
+        clickedBtn.classList.add('wrong-answer');
+    }
+
+    // Показываем текст результата
     if (resultBox) {
-        resultBox.innerHTML = crisis.interactiveQuestion.options[optionIndex].result;
+        // Добавляем иконку в зависимости от правильности
+        const icon = selectedOption.isCorrect ? "✅ " : "❌ ";
+        resultBox.innerHTML = `<b>${icon}</b> ` + selectedOption.result;
         resultBox.classList.remove('hidden');
     }
 };
